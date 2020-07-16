@@ -31,6 +31,24 @@ class BatchHTTPProvider(object):
         self.endpoint_uri = endpoint_uri
         self.logger = logging.getLogger('BatchHTTPProvider')
 
+    def make_request(self, text):
+        self.logger.info("Making request HTTP. URI: %s, Request: %s",
+                          self.endpoint_uri, text)
+        request_data = text.encode('utf-8')
+        headers = {'Content-type': 'application/json'}
+        raw_response = requests.post(
+            self.endpoint_uri,
+            data = request_data,
+            headers = headers
+        )
+
+        response = raw_response.json()
+        self.logger.debug("Getting response HTTP. URI: %s, "
+                          "Request: %s, Response: %s",
+                          self.endpoint_uri, text, response)
+        return response
+
+    # will be deprecated
     def make_batch_request(self, text):
         self.logger.info("Making request HTTP. URI: %s, Request: %s",
                           self.endpoint_uri, text)

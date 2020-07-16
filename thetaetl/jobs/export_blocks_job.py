@@ -25,7 +25,7 @@ import json
 
 from thetaetl.executors.batch_work_executor import BatchWorkExecutor
 from blockchainetl.jobs.base_job import BaseJob
-from thetaetl.json_rpc_requests import generate_get_block_by_height_json_rpc
+from thetaetl.json_rpc_requests import generate_get_blocks_by_range_json_rpc
 from thetaetl.mappers.block_mapper import ThetaBlockMapper
 from thetaetl.mappers.transaction_mapper import ThetaTransactionMapper
 from thetaetl.utils import rpc_response_batch_to_results, rpc_response_to_result, validate_range
@@ -64,17 +64,18 @@ class ExportBlocksJob(BaseJob):
         self.item_exporter.open()
 
     def _export(self):
-        self.batch_work_executor.execute(
-            range(self.start_block, self.end_block + 1),
-            self._export_batch,
-            total_items=self.end_block - self.start_block + 1
-        )
+        self._export_batch(self.start_block, self.end_block)
+        
+        # self.batch_work_executor.execute(
+        #     range(self.start_block, self.end_block + 1),
+        #     self._export_batch,
+        #     total_items=self.end_block - self.start_block + 1
+        # )
 
-    def _export_batch(self, block_number_batch):
-        blocks_rpc = list(generate_get_block_by_height_json_rpc(block_number_batch, self.export_transactions))
-        response = self.theta_provider.make_batch_request(json.dumps(blocks_rpc[0]))
-        # results = rpc_response_batch_to_results(response)
-        results = [rpc_response_to_result(response)]
+    def _export_batch(self, start_block_height, end_block_height):
+        blocks_rpc = generate_get_blocks_by_range_json_rpc(start_block_height, end_block_height, self.export_transactions)
+        response = self.theta_provider.make_request(json.dumps(blocks_rpc))
+        results = rpc_response_to_result(response)
         blocks = [self.block_mapper.json_dict_to_block(result) for result in results]
 
         for block in blocks:

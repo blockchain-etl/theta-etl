@@ -94,7 +94,7 @@ def is_retriable_error(error_code):
         return False
 
     # https://www.jsonrpc.org/specification#error_object
-    if error_code == -32603 or (-32000 >= error_code >= -32099):
+    if error_code == -32601 or error_code == -32603 or (-32000 >= error_code >= -32099):
         return True
 
     return False

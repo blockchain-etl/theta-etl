@@ -29,6 +29,11 @@ def generate_get_block_by_height_json_rpc(block_heights, include_transactions):
             request_id=idx
         )
 
+def generate_get_blocks_by_range_json_rpc(start_block_height, end_block_height, include_transactions):
+    return generate_json_rpc(
+        method='theta.GetBlocksByRange',
+        params=[{"start": str(start_block_height), "end": str(end_block_height)}],
+    )
 
 def generate_trace_block_by_height_json_rpc(block_heights):
     for block_height in block_heights:
