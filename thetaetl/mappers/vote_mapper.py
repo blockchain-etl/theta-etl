@@ -20,11 +20,24 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+from thetaetl.domain.vote import ThetaVote
 
-class ThetaRawTransaction(object):
-    def __init__(self):
-        self.fee = None
-        self.inputs = None
-        self.outputs = None
-        self.block_height = None
-        self.proposer = None
+class ThetaVoteMapper(object):
+    def json_dict_to_vote(self, json_dict):
+        vote = ThetaVote()
+        vote.Block = json_dict.get('Block')
+        vote.Epoch = json_dict.get('Epoch')
+        vote.Height = json_dict.get('Height')
+        vote.ID = json_dict.get('ID')
+        vote.Signature = json_dict.get('Signature')
+        return vote
+
+    def vote_to_dict(self, vote):
+        return {
+            'type': 'vote',
+            'Block': vote.Block,
+            'Epoch': vote.Epoch,
+            'Height': vote.Height,
+            'ID': vote.ID,
+            'Signature': vote.Signature
+        }

@@ -21,10 +21,9 @@
 # SOFTWARE.
 
 
-class ThetaRawTransaction(object):
+class ThetaGuardianVotes(object):
     def __init__(self):
-        self.fee = None
-        self.inputs = None
-        self.outputs = None
-        self.block_height = None
-        self.proposer = None
+        self.Block = None
+        self.Gcp = None
+        self.Multiplies = []
+        self.Signature = {}

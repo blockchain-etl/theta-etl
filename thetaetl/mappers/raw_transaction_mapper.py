@@ -55,6 +55,12 @@ class ThetaRawTransactionMapper(object):
                 for transfer in json_dict['outputs']
                 if isinstance(transfer, dict)
             ]
+        
+        if 'block_height' in json_dict:
+            raw_transaction.block_height = json_dict['block_height']
+
+        if 'proposer' in json_dict:
+            raw_transaction.proposer = self.amount_transfer_mapper.json_dict_to_amount_transfer(json_dict['proposer'])
 
         return raw_transaction
 
@@ -77,9 +83,15 @@ class ThetaRawTransactionMapper(object):
                     for oput in raw_transaction.outputs
         ]
 
+        proposer = None
+        if raw_transaction.proposer is not None:
+            proposer = self.amount_transfer_mapper.amount_transfer_to_dict(raw_transaction.proposer)
+
         return {
             'type': 'raw_transaction',
             'fee': fee,
             'inputs': inputs,
             'outputs': outputs,
+            'block_height': raw_transaction.block_height,
+            'proposer': proposer
         }

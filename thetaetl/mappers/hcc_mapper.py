@@ -20,11 +20,32 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+from thetaetl.domain.hcc import ThetaHCC
+from thetaetl.mappers.vote_mapper import ThetaVoteMapper
 
-class ThetaRawTransaction(object):
-    def __init__(self):
-        self.fee = None
-        self.inputs = None
-        self.outputs = None
-        self.block_height = None
-        self.proposer = None
+class ThetaHCCMapper(object):
+    def __init__(self, vote_mapper=None):
+        if vote_mapper is None:
+            self.vote_mapper = ThetaVoteMapper()
+        else:
+            self.vote_mapper = vote_mapper
+
+    def json_dict_to_hcc(self, json_dict):
+        hcc = ThetaHCC()
+        hcc.BlockHash = json_dict.get('BlockHash')
+        hcc.Votes = [
+            self.vote_mapper.json_dict_to_vote(vote)
+            for vote in json_dict['Votes']
+        ]
+        return hcc
+
+    def hcc_to_dict(self, hcc):
+        votes = [
+            self.vote_mapper.vote_to_dict(vote)
+            for vote in hcc.Votes
+        ]
+        return {
+            'type': 'hcc',
+            'BlockHash': hcc.BlockHash,
+            'Votes': votes
+        }

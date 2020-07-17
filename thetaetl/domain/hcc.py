@@ -21,10 +21,7 @@
 # SOFTWARE.
 
 
-class ThetaRawTransaction(object):
+class ThetaHCC(object):
     def __init__(self):
-        self.fee = None
-        self.inputs = None
-        self.outputs = None
-        self.block_height = None
-        self.proposer = None
+        self.BlockHash = None
+        self.Votes = []
