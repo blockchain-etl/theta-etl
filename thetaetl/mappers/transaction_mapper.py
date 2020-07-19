@@ -26,6 +26,7 @@ from thetaetl.mappers.raw_transaction_mapper import ThetaRawTransactionMapper
 from thetaetl.utils import hex_to_dec, to_normalized_address
 
 
+
 class ThetaTransactionMapper(object):
     def __init__(self, raw_transaction_mapper=None):
         if raw_transaction_mapper is None:
@@ -35,15 +36,15 @@ class ThetaTransactionMapper(object):
 
     def json_dict_to_transaction(self, json_dict):
         transaction = ThetaTransaction()
-        transaction.type = json_dict.get('type')
         transaction.hash = json_dict.get('hash')
+        transaction.type = json_dict.get('type')
 
-        transaction.raw = self.raw_transaction_mapper.json_dict_to_raw_transaction(json_dict.get('raw'))
+        transaction.raw = self.raw_transaction_mapper.json_dict_to_raw_transaction(json_dict.get('raw'), transaction.type)
 
         return transaction
 
     def transaction_to_dict(self, transaction):
-        raw_transactions = self.raw_transaction_mapper.raw_transaction_to_dict(transaction.raw)
+        raw_transactions = self.raw_transaction_mapper.raw_transaction_to_dict(transaction.raw, transaction.type)
         return {
             'type': 'transaction',
             'raw': raw_transactions,

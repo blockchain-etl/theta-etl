@@ -20,32 +20,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from thetaetl.domain.guardian_votes import ThetaGuardianVotes
 
-class ThetaGuardianVotesMapper(object):
-    def __init__(self, guardian_votes=None):
-        if guardian_votes is None:
-            self.guardian_votes = ThetaGuardianVotes()
-        else:
-            self.guardian_votes = guardian_votes
-
-    def json_dict_to_guardian_votes(self, json_dict):
-        guardian_votes = ThetaGuardianVotes()
-        guardian_votes.Block = json_dict.get('Block')
-        guardian_votes.Gcp = json_dict.get('Gcp')
-        guardian_votes.Signature = json_dict.get('Signature')
-        guardian_votes.Multiplies = json_dict.get('Multiplies')
-        return guardian_votes
-
-    def guardian_votes_to_dict(self, guardian_votes):
-        # votes = [
-        #     self.vote_mapper.vote_to_dict(vote)
-        #     for vote in hcc.Votes
-        # ]
-        return {
-            'type': 'guardian_votes',
-            'Block': guardian_votes.Block,
-            'Gcp': guardian_votes.Gcp,
-            'Signature': guardian_votes.Signature,
-            'Multiplies': guardian_votes.Multiplies
-        }
+class ThetaSendTx(object):
+    def __init__(self):
+        self.fee = None
+        self.inputs = []
+        self.outputs = []

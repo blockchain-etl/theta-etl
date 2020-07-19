@@ -58,7 +58,7 @@ class ThetaBlockMapper(object):
         block.hcc = self.hcc_mapper.json_dict_to_hcc(json_dict.get('hcc'))
         if json_dict.get('guardian_votes') is not None:
             block.guardian_votes = self.guardian_votes_mapper.json_dict_to_guardian_votes(json_dict.get('guardian_votes'))
-        # block.children = json_dict.get('children')
+        block.children = json_dict.get('children')
         block.status = json_dict.get('status')
         block.hash = to_normalized_address(json_dict.get('hash'))
 

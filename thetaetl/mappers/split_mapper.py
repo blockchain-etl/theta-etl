@@ -20,11 +20,18 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+from thetaetl.domain.raw_transaction.split import ThetaSplit
 
-class ThetaRawTransaction(object):
-    def __init__(self):
-        self.fee = None
-        self.inputs = None
-        self.outputs = None
-        self.block_height = None
-        self.proposer = None
+class ThetaSplitMapper(object):
+    def json_dict_to_split(self, json_dict):
+        split = ThetaSplit()
+        split.Address = json_dict.get('Address')
+        split.Percentage = json_dict.get('Percentage')
+        return split
+
+    def split_to_dict(self, split):
+        return {
+            'type': 'split',
+            'thetawei': split.Address,
+            'Percentage': split.Percentage
+        }
