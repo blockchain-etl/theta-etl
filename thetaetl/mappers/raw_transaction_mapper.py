@@ -214,7 +214,7 @@ class ThetaRawTransactionMapper(object):
                 'resource_id': raw_transaction.resource_id,
                 'initiator': self.amount_transfer_mapper.amount_transfer_to_dict(raw_transaction.initiator),
                 'duration': raw_transaction.duration,
-                'duration': splits,
+                'splits': splits,
             }
         elif tx_type == TxSmartContract:
             raw_transaction = ThetaSmartContractTx()
