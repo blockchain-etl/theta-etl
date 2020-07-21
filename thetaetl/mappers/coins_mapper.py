@@ -20,10 +20,18 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+from thetaetl.domain.coins import ThetaCoins
 
-class ThetaAmountTransfer(object):
-    def __init__(self):
-        self.address = None
-        self.coins = None
-        self.sequence = None
-        self.signature = None
+class ThetaCoinsMapper(object):
+    def json_dict_to_coins(self, json_dict):
+        coins = ThetaCoins()
+        coins.thetawei = json_dict.get('thetawei')
+        coins.tfuelwei = json_dict.get('tfuelwei')
+        return coins
+
+    def coins_to_dict(self, coins):
+        return {
+            'type': 'coins',
+            'thetawei': coins.thetawei,
+            'tfuelwei': coins.tfuelwei
+        }

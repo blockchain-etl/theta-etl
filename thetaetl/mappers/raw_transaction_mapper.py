@@ -30,8 +30,9 @@ from thetaetl.domain.raw_transaction.split_rule_tx import ThetaSplitRuleTx
 from thetaetl.domain.raw_transaction.smart_contract_tx import ThetaSmartContractTx
 from thetaetl.domain.raw_transaction.staking_tx import ThetaStakingTx
 from thetaetl.domain.raw_transaction.split import ThetaSplit
-from thetaetl.mappers.amount_mapper import ThetaAmountMapper
-from thetaetl.mappers.amount_transfer_mapper import ThetaAmountTransferMapper
+from thetaetl.mappers.coins_mapper import ThetaCoinsMapper
+from thetaetl.mappers.coins_input_mapper import ThetaCoinsInputMapper
+from thetaetl.mappers.coins_output_mapper import ThetaCoinsOutputMapper
 from thetaetl.mappers.split_mapper import ThetaSplitMapper
 
 TxCoinbase = 0
@@ -47,16 +48,21 @@ TxWithdrawStake = 9
 TxDepositStakeV2 = 10
 
 class ThetaRawTransactionMapper(object):
-    def __init__(self, amount_mapper=None, amount_transfer_mapper=None, split_mapper=None):
-        if amount_mapper is None:
-            self.amount_mapper = ThetaAmountMapper()
+    def __init__(self, coins_mapper=None, coins_input_mapper=None, coins_output_mapper=None, split_mapper=None):
+        if coins_mapper is None:
+            self.coins_mapper = ThetaCoinsMapper()
         else:
-            self.amount_mapper = amount_mapper
+            self.coins_mapper = coins_mapper
 
-        if amount_transfer_mapper is None:
-            self.amount_transfer_mapper = ThetaAmountTransferMapper()
+        if coins_input_mapper is None:
+            self.coins_input_mapper = ThetaCoinsInputMapper()
         else:
-            self.amount_transfer_mapper = amount_transfer_mapper
+            self.coins_input_mapper = coins_input_mapper
+
+        if coins_output_mapper is None:
+            self.coins_output_mapper = ThetaCoinsOutputMapper()
+        else:
+            self.coins_output_mapper = coins_output_mapper
 
         if split_mapper is None:
             self.split_mapper = ThetaSplitMapper()
@@ -68,57 +74,57 @@ class ThetaRawTransactionMapper(object):
 
         if tx_type == TxCoinbase:
             raw_transaction = ThetaCoinbaseTx()
-            raw_transaction.proposer = self.amount_transfer_mapper.json_dict_to_amount_transfer(json_dict['proposer'])
-            raw_transaction.outputs = [
-                self.amount_transfer_mapper.json_dict_to_amount_transfer(transfer)
-                for transfer in json_dict['outputs']
-                if isinstance(transfer, dict)
-            ]
             raw_transaction.block_height = json_dict['block_height']
+            raw_transaction.proposer = self.coins_input_mapper.json_dict_to_coins_input(json_dict['proposer'])
+            raw_transaction.outputs = [
+                self.coins_output_mapper.json_dict_to_coins_output(output)
+                for output in json_dict['outputs']
+                if isinstance(output, dict)
+            ]
         elif tx_type == TxSlash:
             raw_transaction = ThetaSlashTx()
-            raw_transaction.proposer = self.amount_transfer_mapper.json_dict_to_amount_transfer(json_dict['proposer'])
+            raw_transaction.proposer = self.coins_input_mapper.json_dict_to_coins_input(json_dict['proposer'])
             raw_transaction.slashed_address = json_dict['slashed_address']
             raw_transaction.reserved_sequence = json_dict['reserved_sequence']
             raw_transaction.slash_proof = json_dict['slash_proof']
         elif tx_type == TxSend:
             raw_transaction = ThetaSendTx()
-            raw_transaction.fee = self.amount_mapper.json_dict_to_amount(json_dict.get('fee'))
+            raw_transaction.fee = self.coins_mapper.json_dict_to_coins(json_dict.get('fee'))
             raw_transaction.inputs = [
-                self.amount_transfer_mapper.json_dict_to_amount_transfer(transfer)
-                for transfer in json_dict['inputs']
-                if isinstance(transfer, dict)
+                self.coins_input_mapper.json_dict_to_coins_input(iput)
+                for iput in json_dict['inputs']
+                if isinstance(iput, dict)
             ]
             raw_transaction.outputs = [
-                self.amount_transfer_mapper.json_dict_to_amount_transfer(transfer)
-                for transfer in json_dict['outputs']
-                if isinstance(transfer, dict)
+                self.coins_output_mapper.json_dict_to_coins_output(output)
+                for output in json_dict['outputs']
+                if isinstance(output, dict)
             ]
         elif tx_type == TxReserveFund:
             raw_transaction = ThetaReserveFundTx()
-            raw_transaction.fee = self.amount_mapper.json_dict_to_amount(json_dict.get('fee'))
-            raw_transaction.source = self.amount_transfer_mapper.json_dict_to_amount_transfer(json_dict['source'])
-            raw_transaction.collateral = self.amount_mapper.json_dict_to_amount(json_dict.get('collateral'))
+            raw_transaction.fee = self.coins_mapper.json_dict_to_coins(json_dict.get('fee'))
+            raw_transaction.source = self.coins_input_mapper.json_dict_to_coins_input(json_dict['source'])
+            raw_transaction.collateral = self.coins_mapper.json_dict_to_coins(json_dict.get('collateral'))
             raw_transaction.resource_ids = json_dict['resource_ids']
             raw_transaction.duration = json_dict['duration']
         elif tx_type == TxReleaseFund:
             raw_transaction = ThetaReleaseFundTx()
-            raw_transaction.fee = self.amount_mapper.json_dict_to_amount(json_dict.get('fee'))
-            raw_transaction.source = self.amount_transfer_mapper.json_dict_to_amount_transfer(json_dict['source'])
+            raw_transaction.fee = self.coins_mapper.json_dict_to_coins(json_dict.get('fee'))
+            raw_transaction.source = self.coins_input_mapper.json_dict_to_coins_input(json_dict['source'])
             raw_transaction.reserve_sequence = json_dict['reserve_sequence']
         elif tx_type == TxServicePayment:
             raw_transaction = ThetaServicePaymentTx()
-            raw_transaction.fee = self.amount_mapper.json_dict_to_amount(json_dict.get('fee'))
-            raw_transaction.source = self.amount_transfer_mapper.json_dict_to_amount_transfer(json_dict['source'])
-            raw_transaction.target = self.amount_transfer_mapper.json_dict_to_amount_transfer(json_dict['target'])
+            raw_transaction.fee = self.coins_mapper.json_dict_to_coins(json_dict.get('fee'))
+            raw_transaction.source = self.coins_input_mapper.json_dict_to_coins_input(json_dict['source'])
+            raw_transaction.target = self.coins_input_mapper.json_dict_to_coins_input(json_dict['target'])
             raw_transaction.payment_sequence = json_dict['payment_sequence']
             raw_transaction.reserve_sequence = json_dict['reserve_sequence']
             raw_transaction.resource_id = json_dict['resource_id']
         elif tx_type == TxSplitRule:
             raw_transaction = ThetaSplitRuleTx()
-            raw_transaction.fee = self.amount_mapper.json_dict_to_amount(json_dict.get('fee'))
+            raw_transaction.fee = self.coins_mapper.json_dict_to_coins(json_dict.get('fee'))
             raw_transaction.resource_id = json_dict['resource_id']
-            raw_transaction.initiator = self.amount_transfer_mapper.json_dict_to_amount_transfer(json_dict['initiator'])
+            raw_transaction.initiator = self.coins_input_mapper.json_dict_to_coins_input(json_dict['initiator'])
             raw_transaction.duration = json_dict['duration']
             raw_transaction.splits = [
                 self.split_mapper.json_dict_to_split(split)
@@ -127,16 +133,16 @@ class ThetaRawTransactionMapper(object):
             ]
         elif tx_type == TxSmartContract:
             raw_transaction = ThetaSmartContractTx()
-            raw_transaction.from_ = self.amount_transfer_mapper.json_dict_to_amount_transfer(json_dict['from'])
-            raw_transaction.to = self.amount_transfer_mapper.json_dict_to_amount_transfer(json_dict['to'])
+            raw_transaction.from_ = self.coins_input_mapper.json_dict_to_coins_input(json_dict['from'])
+            raw_transaction.to = self.coins_output_mapper.json_dict_to_coins_output(json_dict['to'])
             raw_transaction.gas_limit = json_dict['gas_limit']
             raw_transaction.gas_price = json_dict['gas_price']
             raw_transaction.data = json_dict['data']
         elif tx_type == TxDepositStake or tx_type == TxWithdrawStake or tx_type == TxDepositStakeV2:
             raw_transaction = ThetaStakingTx()
-            raw_transaction.fee = self.amount_mapper.json_dict_to_amount(json_dict.get('fee'))
-            raw_transaction.source = self.amount_transfer_mapper.json_dict_to_amount_transfer(json_dict['source'])
-            raw_transaction.holder = self.amount_transfer_mapper.json_dict_to_amount_transfer(json_dict['holder'])
+            raw_transaction.fee = self.coins_mapper.json_dict_to_coins(json_dict.get('fee'))
+            raw_transaction.source = self.coins_input_mapper.json_dict_to_coins_input(json_dict['source'])
+            raw_transaction.holder = self.coins_output_mapper.json_dict_to_coins_output(json_dict['holder'])
             raw_transaction.Purpose = json_dict['Purpose']
 
         return raw_transaction
@@ -144,31 +150,31 @@ class ThetaRawTransactionMapper(object):
     def raw_transaction_to_dict(self, raw_transaction, tx_type):
         if tx_type == TxCoinbase:
             outputs = [
-                self.amount_transfer_mapper.amount_transfer_to_dict(output)
+                self.coins_output_mapper.coins_output_to_dict(output)
                 for output in raw_transaction.outputs
             ]
             return {
                 'type': 'raw_transaction',
                 'outputs': outputs,
                 'block_height': raw_transaction.block_height,
-                'proposer': self.amount_transfer_mapper.amount_transfer_to_dict(raw_transaction.proposer),
+                'proposer': self.coins_input_mapper.coins_input_to_dict(raw_transaction.proposer),
             }
         elif tx_type == TxSlash:
             return {
                 'type': 'raw_transaction',
-                'proposer': self.amount_transfer_mapper.amount_transfer_to_dict(raw_transaction.proposer),
+                'proposer': self.coins_input_mapper.coins_input_to_dict(raw_transaction.proposer),
                 'slashed_address': raw_transaction.slashed_address,
                 'reserved_sequence': raw_transaction.reserved_sequence,
                 'slash_proof': raw_transaction.slash_proof,
             }
         elif tx_type == TxSend:
-            fee = self.amount_mapper.amount_to_dict(raw_transaction.fee)
+            fee = self.coins_mapper.coins_to_dict(raw_transaction.fee)
             inputs = [
-                self.amount_transfer_mapper.amount_transfer_to_dict(iput)
+                self.coins_input_mapper.coins_input_to_dict(iput)
                 for iput in raw_transaction.inputs
             ]
             outputs = [
-                self.amount_transfer_mapper.amount_transfer_to_dict(oput)
+                self.coins_output_mapper.coins_output_to_dict(oput)
                 for oput in raw_transaction.outputs
             ]
             return {
@@ -180,25 +186,25 @@ class ThetaRawTransactionMapper(object):
         elif tx_type == TxReserveFund:
             return {
                 'type': 'raw_transaction',
-                'fee': self.amount_mapper.amount_to_dict(raw_transaction.fee),
-                'source': self.amount_transfer_mapper.amount_transfer_to_dict(raw_transaction.source),
-                'collateral': self.amount_transfer_mapper.amount_to_dict(raw_transaction.collateral),
+                'fee': self.coins_mapper.coins_to_dict(raw_transaction.fee),
+                'source': self.coins_input_mapper.coins_input_to_dict(raw_transaction.source),
+                'collateral': self.coins_mapper.coins_to_dict(raw_transaction.collateral),
                 'resource_ids': raw_transaction.resource_ids,
                 'duration': raw_transaction.duration,
             }
         elif tx_type == TxReleaseFund:
             return {
                 'type': 'raw_transaction',
-                'fee': self.amount_mapper.amount_to_dict(raw_transaction.fee),
-                'source': self.amount_transfer_mapper.amount_transfer_to_dict(raw_transaction.source),
+                'fee': self.coins_mapper.coins_to_dict(raw_transaction.fee),
+                'source': self.coins_input_mapper.coins_input_to_dict(raw_transaction.source),
                 'reserve_sequence': raw_transaction.reserve_sequence,
             }
         elif tx_type == TxServicePayment:
             return {
                 'type': 'raw_transaction',
-                'fee': self.amount_mapper.amount_to_dict(raw_transaction.fee),
-                'source': self.amount_transfer_mapper.amount_transfer_to_dict(raw_transaction.source),
-                'target': self.amount_transfer_mapper.amount_transfer_to_dict(raw_transaction.target),
+                'fee': self.coins_mapper.coins_to_dict(raw_transaction.fee),
+                'source': self.coins_input_mapper.coins_input_to_dict(raw_transaction.source),
+                'target': self.coins_input_mapper.coins_input_to_dict(raw_transaction.target),
                 'payment_sequence': raw_transaction.payment_sequence,
                 'reserve_sequence': raw_transaction.reserve_sequence,
                 'resource_id': raw_transaction.resource_id,
@@ -210,39 +216,27 @@ class ThetaRawTransactionMapper(object):
             ]
             return {
                 'type': 'raw_transaction',
-                'fee': self.amount_mapper.amount_to_dict(raw_transaction.fee),
+                'fee': self.coins_mapper.coins_to_dict(raw_transaction.fee),
                 'resource_id': raw_transaction.resource_id,
-                'initiator': self.amount_transfer_mapper.amount_transfer_to_dict(raw_transaction.initiator),
+                'initiator': self.coins_input_mapper.coins_input_to_dict(raw_transaction.initiator),
                 'duration': raw_transaction.duration,
                 'splits': splits,
             }
         elif tx_type == TxSmartContract:
-            raw_transaction = ThetaSmartContractTx()
-            raw_transaction.from_ = self.amount_transfer_mapper.json_dict_to_amount_transfer(json_dict['from'])
-            raw_transaction.to = self.amount_transfer_mapper.json_dict_to_amount_transfer(json_dict['to'])
-            raw_transaction.gas_limit = json_dict['gas_limit']
-            raw_transaction.gas_price = json_dict['gas_price']
-            raw_transaction.data = json_dict['data']
-
             return {
                 'type': 'raw_transaction',
-                'from': self.amount_transfer_mapper.amount_transfer_to_dict(raw_transaction.from_),
-                'to': self.amount_transfer_mapper.amount_transfer_to_dict(raw_transaction.to),
+                'from': self.coins_input_mapper.coins_input_to_dict(raw_transaction.from_),
+                'to': self.coins_output_mapper.coins_output_to_dict(raw_transaction.to),
                 'gas_limit': raw_transaction.gas_limit,
                 'gas_price': raw_transaction.gas_price,
                 'data': raw_transaction.data,
             }
         elif tx_type == TxDepositStake or tx_type == TxWithdrawStake or tx_type == TxDepositStakeV2:
-            raw_transaction.fee = self.amount_mapper.json_dict_to_amount(json_dict.get('fee'))
-            raw_transaction.source = self.amount_transfer_mapper.json_dict_to_amount_transfer(json_dict['source'])
-            raw_transaction.holder = self.amount_transfer_mapper.json_dict_to_amount_transfer(json_dict['holder'])
-            raw_transaction.Purpose = json_dict['Purpose']
-
             return {
                 'type': 'raw_transaction',
-                'fee': self.amount_mapper.amount_to_dict(raw_transaction.fee),
-                'source': self.amount_transfer_mapper.amount_transfer_to_dict(raw_transaction.source),
-                'holder': self.amount_transfer_mapper.amount_transfer_to_dict(raw_transaction.holder),
+                'fee': self.coins_mapper.coins_to_dict(raw_transaction.fee),
+                'source': self.coins_input_mapper.coins_input_to_dict(raw_transaction.source),
+                'holder': self.coins_output_mapper.coins_output_to_dict(raw_transaction.holder),
                 'Purpose': raw_transaction.Purpose,
             }
         

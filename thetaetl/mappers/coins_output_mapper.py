@@ -20,18 +20,25 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from thetaetl.domain.amount import ThetaAmount
+from thetaetl.domain.coins_output import ThetaCoinsOutput
+from thetaetl.mappers.coins_mapper import ThetaCoinsMapper
 
-class ThetaAmountMapper(object):
-    def json_dict_to_amount(self, json_dict):
-        amount = ThetaAmount()
-        amount.thetawei = json_dict.get('thetawei')
-        amount.tfuelwei = json_dict.get('tfuelwei')
-        return amount
+class ThetaCoinsOutputMapper(object):
+    def __init__(self, coins_mapper=None):
+        if coins_mapper is None:
+            self.coins_mapper = ThetaCoinsMapper()
+        else:
+            self.coins_mapper = coins_mapper
 
-    def amount_to_dict(self, amount):
+    def json_dict_to_coins_output(self, json_dict):
+        coins_output = ThetaCoinsOutput()
+        coins_output.address = json_dict.get('address')
+        coins_output.coins = self.coins_mapper.json_dict_to_coins(json_dict.get('coins'))
+        return coins_output
+
+    def coins_output_to_dict(self, coins_output):
         return {
-            'type': 'amount',
-            'thetawei': amount.thetawei,
-            'tfuelwei': amount.tfuelwei
+            'type': 'coins_output',
+            'address': coins_output.address,
+            'coins': self.coins_mapper.coins_to_dict(coins_output.coins)
         }

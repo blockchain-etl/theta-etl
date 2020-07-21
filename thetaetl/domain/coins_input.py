@@ -21,7 +21,9 @@
 # SOFTWARE.
 
 
-class ThetaAmount(object):
+class ThetaCoinsInput(object):
     def __init__(self):
-        self.thetawei = None
-        self.tfuelwei = None
+        self.address = None
+        self.coins = None
+        self.sequence = None
+        self.signature = None

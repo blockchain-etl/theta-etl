@@ -20,33 +20,29 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from thetaetl.domain.amount_transfer import ThetaAmountTransfer
-from thetaetl.mappers.amount_mapper import ThetaAmountMapper
+from thetaetl.domain.coins_input import ThetaCoinsInput
+from thetaetl.mappers.coins_mapper import ThetaCoinsMapper
 
-class ThetaAmountTransferMapper(object):
-    def __init__(self, amount_mapper=None):
-        if amount_mapper is None:
-            self.amount_mapper = ThetaAmountMapper()
+class ThetaCoinsInputMapper(object):
+    def __init__(self, coins_mapper=None):
+        if coins_mapper is None:
+            self.coins_mapper = ThetaCoinsMapper()
         else:
-            self.amount_mapper = amount_mapper
+            self.coins_mapper = coins_mapper
 
-    def json_dict_to_amount_transfer(self, json_dict):
-        amount_transfer = ThetaAmountTransfer()
-        amount_transfer.address = json_dict.get('address')
-        amount_transfer.sequence = json_dict.get('sequence')
-        amount_transfer.signature = json_dict.get('signature')
+    def json_dict_to_coins_input(self, json_dict):
+        coins_input = ThetaCoinsInput()
+        coins_input.address = json_dict.get('address')
+        coins_input.sequence = json_dict.get('sequence')
+        coins_input.signature = json_dict.get('signature')
+        coins_input.coins = self.coins_mapper.json_dict_to_coins(json_dict.get('coins'))
+        return coins_input
 
-        amount_transfer.coins = self.amount_mapper.json_dict_to_amount(json_dict.get('coins'))
-
-        return amount_transfer
-
-    def amount_transfer_to_dict(self, amount_transfer):
-        if amount_transfer.coins is not None:
-            coins = self.amount_mapper.amount_to_dict(amount_transfer.coins)
+    def coins_input_to_dict(self, coins_input):
         return {
-            'type': 'amount_transfer',
-            'address': amount_transfer.address,
-            'coins': coins,
-            'sequence': amount_transfer.sequence,
-            'signature': amount_transfer.signature
+            'type': 'coins_input',
+            'address': coins_input.address,
+            'sequence': coins_input.sequence,
+            'signature': coins_input.signature,
+            'coins': self.coins_mapper.coins_to_dict(coins_input.coins)
         }
