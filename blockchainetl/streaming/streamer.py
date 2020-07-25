@@ -86,7 +86,7 @@ class Streamer:
                 time.sleep(self.period_seconds)
 
     def _sync_cycle(self):
-        current_block = self.blockchain_streamer_adapter.get_current_block_number()
+        current_block = self.blockchain_streamer_adapter.get_current_block_height()
 
         target_block = self._calculate_target_block(current_block, self.last_synced_block)
         blocks_to_sync = max(target_block - self.last_synced_block, 0)

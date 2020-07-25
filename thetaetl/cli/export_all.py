@@ -30,7 +30,6 @@ from blockchainetl.logging_utils import logging_basic_config
 
 from thetaetl.jobs.export_all_common import export_all_common
 from thetaetl.providers.auto import get_provider_from_uri
-# from thetaetl.service.eth_service import EthService
 from thetaetl.utils import check_classic_provider_uri
 
 logging_basic_config()

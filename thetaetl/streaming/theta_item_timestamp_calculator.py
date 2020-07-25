@@ -25,7 +25,7 @@ import logging
 from datetime import datetime
 
 
-class EthItemTimestampCalculator:
+class ThetaItemTimestampCalculator:
     def calculate(self, item):
         if item is None or not isinstance(item, dict):
             return None

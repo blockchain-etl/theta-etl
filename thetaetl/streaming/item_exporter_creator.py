@@ -30,11 +30,7 @@ def create_item_exporter(output):
         item_exporter = GooglePubSubItemExporter(item_type_to_topic_mapping={
             'block': output + '.blocks',
             'transaction': output + '.transactions',
-            'log': output + '.logs',
-            'token_transfer': output + '.token_transfers',
-            'trace': output + '.traces',
-            'contract': output + '.contracts',
-            'token': output + '.tokens',
+            # 'contract': output + '.contracts',
         })
     elif item_exporter_type == ItemExporterType.POSTGRES:
         from blockchainetl.jobs.exporters.postgres_item_exporter import PostgresItemExporter
@@ -42,15 +38,12 @@ def create_item_exporter(output):
         from blockchainetl.jobs.exporters.converters.unix_timestamp_item_converter import UnixTimestampItemConverter
         from blockchainetl.jobs.exporters.converters.int_to_decimal_item_converter import IntToDecimalItemConverter
         from blockchainetl.jobs.exporters.converters.list_field_item_converter import ListFieldItemConverter
-        from thetaetl.streaming.postgres_tables import BLOCKS, TRANSACTIONS, LOGS, TOKEN_TRANSFERS, TRACES
+        from thetaetl.streaming.postgres_tables import BLOCKS, TRANSACTIONS
 
         item_exporter = PostgresItemExporter(
             output, item_type_to_insert_stmt_mapping={
                 'block': create_insert_statement_for_table(BLOCKS),
                 'transaction': create_insert_statement_for_table(TRANSACTIONS),
-                'log': create_insert_statement_for_table(LOGS),
-                'token_transfer': create_insert_statement_for_table(TOKEN_TRANSFERS),
-                'traces': create_insert_statement_for_table(TRACES),
             },
             converters=[UnixTimestampItemConverter(), IntToDecimalItemConverter(),
                         ListFieldItemConverter('topics', 'topic', fill=4)])

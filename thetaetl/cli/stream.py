@@ -41,7 +41,7 @@ from thetaetl.thread_local_proxy import ThreadLocalProxy
                    'or Postgres connection url e.g. postgresql+pg8000://postgres:admin@127.0.0.1:5432/ethereum. '
                    'If not specified will print to console')
 @click.option('-s', '--start-block', default=None, show_default=True, type=int, help='Start block')
-@click.option('-e', '--entity-types', default=','.join(EntityType.ALL_FOR_INFURA), show_default=True, type=str,
+@click.option('-e', '--entity-types', default=','.join(EntityType.ALL_FOR_STREAMING), show_default=True, type=str,
               help='The list of entity types to export.')
 @click.option('--period-seconds', default=10, show_default=True, type=int, help='How many seconds to sleep between syncs')
 @click.option('-b', '--batch-size', default=10, show_default=True, type=int, help='How many blocks to batch in single request')
@@ -58,15 +58,15 @@ def stream(last_synced_block_file, lag, provider_uri, output, start_block, entit
     validate_entity_types(entity_types, output)
 
     from thetaetl.streaming.item_exporter_creator import create_item_exporter
-    from thetaetl.streaming.eth_streamer_adapter import EthStreamerAdapter
+    from thetaetl.streaming.theta_streamer_adapter import ThetaStreamerAdapter
     from blockchainetl.streaming.streamer import Streamer
 
     # TODO: Implement fallback mechanism for provider uris instead of picking randomly
     provider_uri = pick_random_provider_uri(provider_uri)
     logging.info('Using ' + provider_uri)
 
-    streamer_adapter = EthStreamerAdapter(
-        batch_web3_provider=ThreadLocalProxy(lambda: get_provider_from_uri(provider_uri, batch=True)),
+    streamer_adapter = ThetaStreamerAdapter(
+        theta_provider=ThreadLocalProxy(lambda: get_provider_from_uri(provider_uri, batch=True)),
         item_exporter=create_item_exporter(output),
         batch_size=batch_size,
         max_workers=max_workers,

@@ -37,7 +37,7 @@ class ThetaTransactionMapper(object):
     def json_dict_to_transaction(self, json_dict):
         transaction = ThetaTransaction()
         transaction.hash = json_dict.get('hash')
-        transaction.type = json_dict.get('type')
+        transaction.type = json_dict.get('tx_type')
 
         transaction.raw = self.raw_transaction_mapper.json_dict_to_raw_transaction(json_dict.get('raw'), transaction.type)
 
@@ -48,6 +48,6 @@ class ThetaTransactionMapper(object):
         return {
             'type': 'transaction',
             'raw': raw_transactions,
-            'type': transaction.type,
+            'tx_type': transaction.type,
             'hash': transaction.hash,
         }

@@ -26,7 +26,7 @@ from datetime import datetime, timezone
 from thetaetl.service.graph_operations import GraphOperations, OutOfBoundsError, Point
 
 
-class EthService(object):
+class ThetaService(object):
     def __init__(self, web3):
         graph = BlockTimestampGraph(web3)
         self._graph_operations = GraphOperations(graph)

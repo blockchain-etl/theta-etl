@@ -21,6 +21,11 @@
 # SOFTWARE.
 
 
+def generate_get_status_json_rpc():
+    return generate_json_rpc(
+        method='theta.GetStatus',
+    )
+
 def generate_get_block_by_height_json_rpc(block_heights, include_transactions):
     for idx, block_height in enumerate(block_heights):
         yield generate_json_rpc(
@@ -35,25 +40,6 @@ def generate_get_blocks_by_range_json_rpc(start_block_height, end_block_height, 
         params=[{"start": str(start_block_height), "end": str(end_block_height)}],
     )
 
-def generate_trace_block_by_height_json_rpc(block_heights):
-    for block_height in block_heights:
-        yield generate_json_rpc(
-            method='debug_traceBlockByHeight',
-            params=[hex(block_height), {'tracer': 'callTracer'}],
-            # save block_height in request ID, so later we can identify block height in response
-            request_id=block_height,
-        )
-
-
-def generate_get_receipt_json_rpc(transaction_hashes):
-    for idx, transaction_hash in enumerate(transaction_hashes):
-        yield generate_json_rpc(
-            method='eth_getTransactionReceipt',
-            params=[transaction_hash],
-            request_id=idx
-        )
-
-
 def generate_get_code_json_rpc(contract_addresses, block='latest'):
     for idx, contract_address in enumerate(contract_addresses):
         yield generate_json_rpc(
@@ -63,7 +49,7 @@ def generate_get_code_json_rpc(contract_addresses, block='latest'):
         )
 
 
-def generate_json_rpc(method, params, request_id=1):
+def generate_json_rpc(method, params=[], request_id=1):
     return {
         'jsonrpc': '2.0',
         'method': method,

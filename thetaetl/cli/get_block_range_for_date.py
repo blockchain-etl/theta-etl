@@ -27,7 +27,6 @@ from datetime import datetime
 
 from blockchainetl.file_utils import smart_open
 from blockchainetl.logging_utils import logging_basic_config
-# from thetaetl.service.eth_service import EthService
 from thetaetl.providers.auto import get_provider_from_uri
 from thetaetl.utils import check_classic_provider_uri
 
