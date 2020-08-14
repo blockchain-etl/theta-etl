@@ -30,20 +30,8 @@
         "type": "STRING"
     },
     {
-        "description": "block parent hash",
-        "mode": "REQUIRED",
-        "name": "parent",
-        "type": "STRING"
-    },
-    {
         "description": "block transactions hash",
         "mode": "NULLABLE",
-        "name": "transactions_hash",
-        "type": "STRING"
-    },
-    {
-        "description": "block state hash",
-        "mode": "REQUIRED",
         "name": "state_hash",
         "type": "STRING"
     },
@@ -60,28 +48,68 @@
         "type": "STRING"
     },
     {
+        "description": "block hcc",
+        "mode": "NULLABLE",
+        "name": "hcc",
+        "type": "RECORD",
+        "fields": [
+            {
+                "description": "hcc blockhash",
+                "mode": "REQUIRED",
+                "name": "BlockHash",
+                "type": "STRING"
+            },
+            {
+                "description": "hcc votes",
+                "mode": "REPEATED",
+                "name": "Votes",
+                "type": "STRING"
+            }
+        ]
+    },
+    {
         "description": "block guardian votes",
         "mode": "REPEATED",
         "name": "guardian_votes",
-        "type": "RECORD"
+        "type": "RECORD",
+        "fields": [
+            {
+                "description": "guardian vote block hash",
+                "mode": "REQUIRED",
+                "name": "Block",
+                "type": "STRING"
+            },
+            {
+                "description": "guardian vote Gcp",
+                "mode": "REQUIRED",
+                "name": "Gcp",
+                "type": "STRING"
+            },
+            {
+                "description": "guardian vote Signature",
+                "mode": "REQUIRED",
+                "name": "Signature",
+                "type": "STRING"
+            },
+            {
+                "description": "guardian vote Multiplies",
+                "mode": "REQUIRED",
+                "name": "Multiplies",
+                "type": "STRING"
+            }
+        ]
     },
     {
         "description": "block children block hashes",
         "mode": "REPEATED",
         "name": "children",
-        "type": "RECORD"
-    },
-    {
-        "description": "block children block hashes",
-        "mode": "REPEATED",
-        "name": "children",
-        "type": "RECORD"
+        "type": "STRING"
     },
     {
         "description": "block status",
         "mode": "REQUIRED",
         "name": "status",
-        "type": "INT64"
+        "type": "NUMERIC"
     },
     {
         "description": "block hash",
@@ -99,7 +127,7 @@
                 "description": "transaction type",
                 "mode": "REQUIRED",
                 "name": "type",
-                "type": "INT64"
+                "type": "NUMERIC"
             },
             {
                 "description": "transaction hash",
@@ -434,7 +462,7 @@
                                 "description": "transaction split percentage",
                                 "mode": "REQUIRED",
                                 "name": "Percentage",
-                                "type": "INT64"
+                                "type": "NUMERIC"
                             }
                         ]
                     },
@@ -577,7 +605,7 @@
                         "description": "transaction Purpose",
                         "mode": "NULLABLE",
                         "name": "Purpose",
-                        "type": "INT64"
+                        "type": "NUMERIC"
                     }
                 ]
             }

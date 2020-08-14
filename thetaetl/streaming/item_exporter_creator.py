@@ -28,8 +28,9 @@ def create_item_exporter(output):
     if item_exporter_type == ItemExporterType.PUBSUB:
         from blockchainetl.jobs.exporters.google_pubsub_item_exporter import GooglePubSubItemExporter
         item_exporter = GooglePubSubItemExporter(item_type_to_topic_mapping={
-            'block': output + '.blocks',
-            'transaction': output + '.transactions',
+            'block': output,
+            # 'block': output + '.blocks',
+            # 'transaction': output + '.transactions',
             # 'contract': output + '.contracts',
         })
     elif item_exporter_type == ItemExporterType.POSTGRES:
