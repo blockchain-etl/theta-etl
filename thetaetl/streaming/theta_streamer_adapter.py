@@ -82,8 +82,8 @@ class ThetaStreamerAdapter:
         #     enriched_transactions + \
         #     enriched_contracts
 
-        self.calculate_item_ids(all_items)
-        self.calculate_item_timestamps(all_items)
+        # self.calculate_item_ids(all_items)
+        # self.calculate_item_timestamps(all_items)
 
         self.item_exporter.export_items(all_items)
 

@@ -92,7 +92,7 @@ class ThetaBlockMapper(object):
             'timestamp': block.timestamp,
             'proposer': block.proposer,
             'hcc': self.hcc_mapper.hcc_to_dict(block.hcc),
-            'guardian_votes': guardian_votes,
+            # 'guardian_votes': guardian_votes,
             'children': block.children,
             'status': block.status,
             'hash': block.hash,

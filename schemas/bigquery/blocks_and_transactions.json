@@ -1,5 +1,11 @@
 [
     {
+        "description": "object type",
+        "mode": "REQUIRED",
+        "name": "type",
+        "type": "STRING"
+    },
+    {
         "description": "chain id",
         "mode": "REQUIRED",
         "name": "chain_id",
@@ -54,6 +60,12 @@
         "type": "RECORD",
         "fields": [
             {
+                "description": "object type",
+                "mode": "REQUIRED",
+                "name": "type",
+                "type": "STRING"
+            },
+            {
                 "description": "hcc blockhash",
                 "mode": "REQUIRED",
                 "name": "BlockHash",
@@ -63,7 +75,45 @@
                 "description": "hcc votes",
                 "mode": "REPEATED",
                 "name": "Votes",
-                "type": "STRING"
+                "type": "RECORD",
+                "fields": [
+                    {
+                        "description": "object type",
+                        "mode": "REQUIRED",
+                        "name": "type",
+                        "type": "STRING"
+                    },
+                    {
+                        "description": "Hash of the tip as seen by the voter",
+                        "mode": "REQUIRED",
+                        "name": "Block",
+                        "type": "STRING"
+                    },
+                    {
+                        "description": "Height of the tip",
+                        "mode": "REQUIRED",
+                        "name": "Height",
+                        "type": "NUMERIC"
+                    },
+                    {
+                        "description": "Voter's current epoch",
+                        "mode": "REQUIRED",
+                        "name": "Epoch",
+                        "type": "NUMERIC"
+                    },
+                    {
+                        "description": "Voter's address",
+                        "mode": "REQUIRED",
+                        "name": "ID",
+                        "type": "STRING"
+                    },
+                    {
+                        "description": "Voter's signature",
+                        "mode": "REQUIRED",
+                        "name": "Signature",
+                        "type": "STRING"
+                    }
+                ]
             }
         ]
     },
@@ -73,6 +123,12 @@
         "name": "guardian_votes",
         "type": "RECORD",
         "fields": [
+            {
+                "description": "object type",
+                "mode": "REQUIRED",
+                "name": "type",
+                "type": "STRING"
+            },
             {
                 "description": "guardian vote block hash",
                 "mode": "REQUIRED",
@@ -89,13 +145,21 @@
                 "description": "guardian vote Signature",
                 "mode": "REQUIRED",
                 "name": "Signature",
-                "type": "STRING"
+                "type": "RECORD",
+                "fields": [
+                    {
+                        "description": "message signature",
+                        "mode": "NULLABLE",
+                        "name": "s",
+                        "type": "STRING"
+                    }
+                ]
             },
             {
                 "description": "guardian vote Multiplies",
-                "mode": "REQUIRED",
+                "mode": "REPEATED",
                 "name": "Multiplies",
-                "type": "STRING"
+                "type": "NUMERIC"
             }
         ]
     },
@@ -124,9 +188,15 @@
         "type": "RECORD",
         "fields": [
             {
-                "description": "transaction type",
+                "description": "object type",
                 "mode": "REQUIRED",
                 "name": "type",
+                "type": "STRING"
+            },
+            {
+                "description": "transaction type",
+                "mode": "REQUIRED",
+                "name": "tx_type",
                 "type": "NUMERIC"
             },
             {
@@ -142,6 +212,12 @@
                 "type": "RECORD",
                 "fields": [
                     {
+                        "description": "object type",
+                        "mode": "REQUIRED",
+                        "name": "type",
+                        "type": "STRING"
+                    },
+                    {
                         "description": "transaction block height",
                         "mode": "NULLABLE",
                         "name": "block_height",
@@ -153,6 +229,12 @@
                         "name": "proposer",
                         "type": "RECORD",
                         "fields": [
+                            {
+                                "description": "object type",
+                                "mode": "REQUIRED",
+                                "name": "type",
+                                "type": "STRING"
+                            },
                             {
                                 "description": "transaction proposer address",
                                 "mode": "REQUIRED",
@@ -178,6 +260,12 @@
                                 "type": "RECORD",
                                 "fields": [
                                     {
+                                        "description": "object type",
+                                        "mode": "REQUIRED",
+                                        "name": "type",
+                                        "type": "STRING"
+                                    },
+                                    {
                                         "description": "transaction proposer coins thetawei",
                                         "mode": "REQUIRED",
                                         "name": "thetawei",
@@ -201,6 +289,12 @@
                         "type": "RECORD",
                         "fields": [
                             {
+                                "description": "object type",
+                                "mode": "REQUIRED",
+                                "name": "type",
+                                "type": "STRING"
+                            },
+                            {
                                 "description": "transaction fee thetawei",
                                 "mode": "REQUIRED",
                                 "name": "thetawei",
@@ -216,10 +310,16 @@
                     },
                     {
                         "description": "transaction inputs",
-                        "mode": "NULLABLE",
+                        "mode": "REPEATED",
                         "name": "inputs",
                         "type": "RECORD",
                         "fields": [
+                            {
+                                "description": "object type",
+                                "mode": "REQUIRED",
+                                "name": "type",
+                                "type": "STRING"
+                            },
                             {
                                 "description": "transaction input address",
                                 "mode": "REQUIRED",
@@ -245,6 +345,12 @@
                                 "type": "RECORD",
                                 "fields": [
                                     {
+                                        "description": "object type",
+                                        "mode": "REQUIRED",
+                                        "name": "type",
+                                        "type": "STRING"
+                                    },
+                                    {
                                         "description": "transaction input coins thetawei",
                                         "mode": "REQUIRED",
                                         "name": "thetawei",
@@ -263,10 +369,16 @@
                     },
                     {
                         "description": "transaction outputs",
-                        "mode": "NULLABLE",
+                        "mode": "REPEATED",
                         "name": "outputs",
                         "type": "RECORD",
                         "fields": [
+                            {
+                                "description": "object type",
+                                "mode": "REQUIRED",
+                                "name": "type",
+                                "type": "STRING"
+                            },
                             {
                                 "description": "transaction output address",
                                 "mode": "REQUIRED",
@@ -280,6 +392,12 @@
                                 "type": "RECORD",
                                 "fields": [
                                     {
+                                        "description": "object type",
+                                        "mode": "REQUIRED",
+                                        "name": "type",
+                                        "type": "STRING"
+                                    },
+                                    {
                                         "description": "transaction output coins thetawei",
                                         "mode": "REQUIRED",
                                         "name": "thetawei",
@@ -291,38 +409,43 @@
                                         "name": "tfuelwei",
                                         "type": "STRING"
                                     }
-
                                 ]
                             }
                         ]
                     },
                     {
-                        "description": "transaction slashed_address",
+                        "description": "transaction slashed address",
                         "mode": "NULLABLE",
                         "name": "slashed_address",
                         "type": "STRING"
                     },
                     {
-                        "description": "transaction reserve_sequence",
+                        "description": "transaction payment sequence",
+                        "mode": "NULLABLE",
+                        "name": "payment_sequence",
+                        "type": "STRING"
+                    },
+                    {
+                        "description": "transaction reserve sequence",
                         "mode": "NULLABLE",
                         "name": "reserve_sequence",
                         "type": "STRING"
                     },
                     {
-                        "description": "transaction slash_proof",
+                        "description": "transaction slash proof",
                         "mode": "NULLABLE",
                         "name": "slash_proof",
                         "type": "STRING"
                     },
                     {
-                        "description": "transaction resource_id",
+                        "description": "transaction resource id",
                         "mode": "NULLABLE",
                         "name": "resource_id",
                         "type": "STRING"
                     },
                     {
-                        "description": "transaction resource_ids",
-                        "mode": "NULLABLE",
+                        "description": "transaction resource ids",
+                        "mode": "REPEATED",
                         "name": "resource_ids",
                         "type": "STRING"
                     },
@@ -338,6 +461,12 @@
                         "name": "source",
                         "type": "RECORD",
                         "fields": [
+                            {
+                                "description": "object type",
+                                "mode": "REQUIRED",
+                                "name": "type",
+                                "type": "STRING"
+                            },
                             {
                                 "description": "transaction source address",
                                 "mode": "REQUIRED",
@@ -363,6 +492,12 @@
                                 "type": "RECORD",
                                 "fields": [
                                     {
+                                        "description": "object type",
+                                        "mode": "REQUIRED",
+                                        "name": "type",
+                                        "type": "STRING"
+                                    },
+                                    {
                                         "description": "transaction source coins thetawei",
                                         "mode": "REQUIRED",
                                         "name": "thetawei",
@@ -385,6 +520,12 @@
                         "name": "target",
                         "type": "RECORD",
                         "fields": [
+                            {
+                                "description": "object type",
+                                "mode": "REQUIRED",
+                                "name": "type",
+                                "type": "STRING"
+                            },
                             {
                                 "description": "transaction target address",
                                 "mode": "REQUIRED",
@@ -410,6 +551,12 @@
                                 "type": "RECORD",
                                 "fields": [
                                     {
+                                        "description": "object type",
+                                        "mode": "REQUIRED",
+                                        "name": "type",
+                                        "type": "STRING"
+                                    },
+                                    {
                                         "description": "transaction target coins thetawei",
                                         "mode": "REQUIRED",
                                         "name": "thetawei",
@@ -433,6 +580,12 @@
                         "type": "RECORD",
                         "fields": [
                             {
+                                "description": "object type",
+                                "mode": "REQUIRED",
+                                "name": "type",
+                                "type": "STRING"
+                            },
+                            {
                                 "description": "transaction collateral thetawei",
                                 "mode": "REQUIRED",
                                 "name": "thetawei",
@@ -452,6 +605,12 @@
                         "name": "splits",
                         "type": "RECORD",
                         "fields": [
+                            {
+                                "description": "object type",
+                                "mode": "REQUIRED",
+                                "name": "type",
+                                "type": "STRING"
+                            },
                             {
                                 "description": "transaction split address",
                                 "mode": "REQUIRED",
@@ -491,6 +650,12 @@
                         "type": "RECORD",
                         "fields": [
                             {
+                                "description": "object type",
+                                "mode": "REQUIRED",
+                                "name": "type",
+                                "type": "STRING"
+                            },
+                            {
                                 "description": "transaction from address",
                                 "mode": "REQUIRED",
                                 "name": "address",
@@ -515,6 +680,12 @@
                                 "type": "RECORD",
                                 "fields": [
                                     {
+                                        "description": "object type",
+                                        "mode": "REQUIRED",
+                                        "name": "type",
+                                        "type": "STRING"
+                                    },
+                                    {
                                         "description": "transaction from coins thetawei",
                                         "mode": "REQUIRED",
                                         "name": "thetawei",
@@ -538,6 +709,12 @@
                         "type": "RECORD",
                         "fields": [
                             {
+                                "description": "object type",
+                                "mode": "REQUIRED",
+                                "name": "type",
+                                "type": "STRING"
+                            },
+                            {
                                 "description": "transaction to address",
                                 "mode": "REQUIRED",
                                 "name": "address",
@@ -549,6 +726,12 @@
                                 "name": "coins",
                                 "type": "RECORD",
                                 "fields": [
+                                    {
+                                        "description": "object type",
+                                        "mode": "REQUIRED",
+                                        "name": "type",
+                                        "type": "STRING"
+                                    },
                                     {
                                         "description": "transaction to coins thetawei",
                                         "mode": "REQUIRED",
@@ -573,6 +756,12 @@
                         "type": "RECORD",
                         "fields": [
                             {
+                                "description": "object type",
+                                "mode": "REQUIRED",
+                                "name": "type",
+                                "type": "STRING"
+                            },
+                            {
                                 "description": "transaction holder address",
                                 "mode": "REQUIRED",
                                 "name": "address",
@@ -584,6 +773,12 @@
                                 "name": "coins",
                                 "type": "RECORD",
                                 "fields": [
+                                    {
+                                        "description": "object type",
+                                        "mode": "REQUIRED",
+                                        "name": "type",
+                                        "type": "STRING"
+                                    },
                                     {
                                         "description": "transaction holder coins thetawei",
                                         "mode": "REQUIRED",

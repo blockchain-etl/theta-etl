@@ -24,5 +24,5 @@
 class ThetaCoinbaseTx(object):
     def __init__(self):
         self.proposer = None
-        self.outputs = None
+        self.outputs = []
         self.block_height = None

@@ -29,8 +29,8 @@ from timeout_decorator import timeout_decorator
 
 class GooglePubSubItemExporter:
 
-    def __init__(self, item_type_to_topic_mapping, message_attributes=('item_id', 'item_timestamp')):
-    # def __init__(self, item_type_to_topic_mapping, message_attributes=()):
+    # def __init__(self, item_type_to_topic_mapping, message_attributes=('item_id', 'item_timestamp')):
+    def __init__(self, item_type_to_topic_mapping, message_attributes=()):
         self.item_type_to_topic_mapping = item_type_to_topic_mapping
         self.publisher = create_publisher()
         self.message_attributes = message_attributes

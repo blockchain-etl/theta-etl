@@ -143,7 +143,7 @@ class ThetaRawTransactionMapper(object):
             raw_transaction.fee = self.coins_mapper.json_dict_to_coins(json_dict.get('fee'))
             raw_transaction.source = self.coins_input_mapper.json_dict_to_coins_input(json_dict['source'])
             raw_transaction.holder = self.coins_output_mapper.json_dict_to_coins_output(json_dict['holder'])
-            raw_transaction.Purpose = json_dict['Purpose']
+            raw_transaction.purpose = json_dict['purpose']
 
         return raw_transaction
 
@@ -237,7 +237,7 @@ class ThetaRawTransactionMapper(object):
                 'fee': self.coins_mapper.coins_to_dict(raw_transaction.fee),
                 'source': self.coins_input_mapper.coins_input_to_dict(raw_transaction.source),
                 'holder': self.coins_output_mapper.coins_output_to_dict(raw_transaction.holder),
-                'Purpose': raw_transaction.Purpose,
+                'purpose': raw_transaction.purpose,
             }
         
         return None
