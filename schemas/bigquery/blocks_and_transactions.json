@@ -626,6 +626,65 @@
                         ]
                     },
                     {
+                        "description": "transaction initiator",
+                        "mode": "NULLABLE",
+                        "name": "initiator",
+                        "type": "RECORD",
+                        "fields": [
+                            {
+                                "description": "object type",
+                                "mode": "REQUIRED",
+                                "name": "type",
+                                "type": "STRING"
+                            },
+                            {
+                                "description": "transaction initiator address",
+                                "mode": "REQUIRED",
+                                "name": "address",
+                                "type": "STRING"
+                            },
+                            {
+                                "description": "transaction initiator sequence",
+                                "mode": "REQUIRED",
+                                "name": "sequence",
+                                "type": "STRING"
+                            },
+                            {
+                                "description": "transaction initiator signature",
+                                "mode": "REQUIRED",
+                                "name": "signature",
+                                "type": "STRING"
+                            },
+                            {
+                                "description": "transaction initiator coins",
+                                "mode": "REQUIRED",
+                                "name": "coins",
+                                "type": "RECORD",
+                                "fields": [
+                                    {
+                                        "description": "object type",
+                                        "mode": "REQUIRED",
+                                        "name": "type",
+                                        "type": "STRING"
+                                    },
+                                    {
+                                        "description": "transaction initiator coins thetawei",
+                                        "mode": "REQUIRED",
+                                        "name": "thetawei",
+                                        "type": "STRING"
+                                    },
+                                    {
+                                        "description": "transaction initiator coins tfuelwei",
+                                        "mode": "REQUIRED",
+                                        "name": "tfuelwei",
+                                        "type": "STRING"
+                                    }
+
+                                ]
+                            }
+                        ]
+                    },
+                    {
                         "description": "transaction gas_limit",
                         "mode": "NULLABLE",
                         "name": "gas_limit",

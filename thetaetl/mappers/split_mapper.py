@@ -32,6 +32,6 @@ class ThetaSplitMapper(object):
     def split_to_dict(self, split):
         return {
             'type': 'split',
-            'thetawei': split.Address,
+            'Address': split.Address,
             'Percentage': split.Percentage
         }
