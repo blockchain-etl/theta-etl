@@ -601,7 +601,7 @@
                     },
                     {
                         "description": "transaction splits",
-                        "mode": "NULLABLE",
+                        "mode": "REPEATED",
                         "name": "splits",
                         "type": "RECORD",
                         "fields": [
